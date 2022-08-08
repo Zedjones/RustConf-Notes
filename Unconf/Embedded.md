@@ -1,0 +1,34 @@
+- Virtualization
+- Lots of application w/ `no-std` that aren't necessarily what is traditionally thought of when hearing "embedded"
+- Lots of considerations for making `no-std`-compatible crates
+    - Tricky to make a crate that's both `std` and `no-std` compatible, lack of documentation
+- ESP32 has good support
+- Matician 
+- How to encourage library devs to include `no-std` support
+    - Make it more visible in the Rust book, etc. 
+        - Section in the book for considerations
+    - A lot of assumptions that new users already have embedded development experience
+    - More guidance for library authors on how to use the feature gates, etc.
+    - Library authors, however, do seem quite receptive to PRs that add support for `no-std`
+    - Standardized location for embedded developers to communicate and share resouces, esp. with fragmentation of different hardware targets
+- Better collation of resources that specify replacements for `std`/heap data types
+- Resources
+    - Embedded Rust book
+        - However, it might be out-of-date since it was sponsored to be produced the first time
+    - Ferris Systems
+- Creation of more general Discord channel for all ranges of embedded
+- `smoltcp` on STM32
+    - Zero-copy library, very performant
+- Not as many libraries in the embedded Rust world, but generally higher quality
+- CAN library for Rust?
+- `defmt` crates
+    - Really efficient logging and testing framework
+        - Can use `cargo run` and `cargo test`
+- Better resources for setting up serial over USB
+- `areweembeddedyet` idea
+    - How well each platform is supported
+- Is there a central place for embedded Rust users to congregate? 
+    - If not, we should create one
+    - Landing page for new users to find more specific communities
+- Rust is in a unique position in the embedded ecosystem, in that we have a significant number of libraries that we can run on embedded platforms
+    - Compared to C/C++

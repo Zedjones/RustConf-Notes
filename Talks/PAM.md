@@ -1,0 +1,10 @@
+- Authentication vs Authorization
+    - Authentication
+        - Makes sure you are who you say you are
+    - Authorization
+        - Makes sure you are allowed to do something (permissions)
+- PAM
+    - Allows configuration of policies
+    - Modules are for _changing_ passwords rather than the logic of using said passwords
+- Tailscale can be used as an authentication layer
+- "It's kinda terrifying, but at least it's everywhere"

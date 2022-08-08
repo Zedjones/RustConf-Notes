@@ -1,0 +1,31 @@
+- Async Rust
+    - Green threads have downside of being obscure to the underlying OS and other programming languages
+        - Hard to write low-level, IO system
+    - `Future`s and polling
+        - Time slicing and scheduling of calling `poll`
+        - Translation can't work for methods because of RPITIT
+    - `await`
+        - `IntoFuture` 
+            - `.await` doesn't need to return a future, just something that can be converted into one
+        - `drop` and cancelling futures work well hand-in-hand
+    - Issues with polling
+        - Cancellation safety
+        - Completion IO
+            - `IO_uring` uses this model (`IOCP` on Windows)
+            - User initiates read, OS later on informs user that the I/O is complete
+                - User must guarantee that buffer stays alive and that the OS has unique access for entire I/O operation
+                    - Works very naturally in Rust due to guarantees
+                        - Not so well with cancellation
+                            - OS doesn't know that read is cancelled even if program does
+                            - Unfortunately, cancellation is asynchronous as well, and buffer has to be around until cancellation completes
+                            - `async drop` is difficult, lots of technical challenges
+                                - `drop` is *not* guaranteed to run, anyhow
+                            - Can duplicate buffer and copy b/w user buffer, but slow and lots of copies
+                            - `BufRead`, buffer is internal to the reader
+                                - Works in most cases, but might need an `OwnedRead` in some cases
+    - Want `async` to be available anywhere, ultimately
+        - Should be easy to change runtime and get started without having to care about which runtime you're using (need independent)
+        - Debugging should be just as easy as debugging a synchronous program
+        - Async working group
+            - Call for contribution, documentation/testing/code
+            - Call for feedback on interfaces

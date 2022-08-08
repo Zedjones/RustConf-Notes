@@ -1,0 +1,43 @@
+- Unsafe Code
+    - Memory Models
+        - Programs need memory, but we don't want to use it 
+        - Make allocations abstract and first-class
+        - Programmers do unusual things with memory
+        - Memory is slow and some things can't be done in memory
+        - Once we venture across functions, we need memory to store allocated items
+        - Provenance
+            - Membership defined by chain of other members (pointers)
+        - Dynamic checking of memory access vs static optimization (`rustc`)
+            - `miri` - rust interpreter
+            - `cheri` - hardware implementation of dynamic checking
+        - Tracking clones is difficult
+            - Static tracker
+                - Function-local
+                - Easy to escape    
+                    - But, we can see the escapes happening **(exposing)**
+                    - Assume the worst, mark "strangers" are biohazard clones
+                        - But all these "biohazards" into a club, assuming they're all clones of each other
+            - Miri tracking
+                - Looks at whole program dynamically, nothing can escape its view (in Rust)
+                    - But there is FFI escape
+                - Not compatible with native code, outside of small portions of native APIs
+                    - Will just crash
+            - Cheri tracking
+                - Has knowledge of everything, even native code
+                - Except for time travellers
+                    - Dangling pointers that lead to use-after-free
+                - Need a temporal component to understand which allocation the pointer was actually part of
+        - Very conservative with casts to/from raw pointers
+            - `ptr -> int` exposes
+            - `int -> ptr` exposed
+        - Requiring sponsorship (knowing another pointer) with dynamic casts solves use-after-frees
+            - `with_addr`
+                - BAD: `addr as *const T`
+                - GOOD: `sponsor_ptr.with_addr(addr)`
+            - Exposing is explicit
+                - BAD: `ptr as usize`
+                - GOOD: `ptr.expose_addr()`
+                - GREAT: `ptr.addr()`
+            - `from_exposed_addr` and `invalid` more clear
+                - UNCLEAR: `some_int as *const T`
+        - Available on stable using `sptr`: strict provenance ptr polyfill
